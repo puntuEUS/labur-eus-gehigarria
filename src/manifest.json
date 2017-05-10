@@ -1,0 +1,31 @@
+{
+  "manifest_version": 2,
+  "name": "Laburtu",
+  "version": "0.1",
+
+  "description": "Laburtu helbideak labur.eus zerbitzua erabiliz.",
+
+  "icons": {
+    "48": "icons/laburtu-48.png",
+    "96": "icons/laburtu-96.png"
+  },
+
+  "permissions": [
+    "clipboardWrite",
+    "tabs",
+    "https://labur.eus/"
+  ],
+
+  "page_action": {
+    "browser_style": true,
+    "default_icon": {
+      "19": "icons/laburtu-19.png"
+    },
+    "default_title": "Laburtu!",
+    "default_popup": "popup.html"
+  },
+
+  "background": {
+    "scripts": ["laburtu.js"]
+  }
+}
