@@ -16,6 +16,7 @@
         "clipboardWrite",
         "tabs",
         "contextMenus",
+        "storage",
         "<all_urls>"
     ],
 
@@ -26,6 +27,10 @@
         },
         "default_title": "Laburtu!",
         "default_popup": "popup.html"
+    },
+
+    "options_ui": {
+        "page": "options.html"
     },
 
     "background": {
