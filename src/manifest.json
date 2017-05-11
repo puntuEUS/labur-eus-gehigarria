@@ -16,7 +16,7 @@
     "clipboardWrite",
     "tabs",
     "contextMenus",
-    "https://labur.eus/"
+    "<all_urls>"
   ],
 
   "page_action": {
