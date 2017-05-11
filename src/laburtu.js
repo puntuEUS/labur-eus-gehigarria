@@ -20,8 +20,8 @@ Create the context menu item.
 */
 browser.contextMenus.create({
   id: "laburtu-eus",
-  title: 'Laburtu!',
-  contexts: ["all"]
+  title: 'Laburtu URL hau',
+  contexts: ["link"]
 }, onContextMenuItemCreated);
 
 
