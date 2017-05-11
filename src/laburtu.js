@@ -6,6 +6,37 @@ const URL_CACHE = {};
 
 let currentTab = null;
 
+function onContextMenuItemCreated(n) {
+    if (browser.runtime.lastError) {
+        console.log(`Error: ${browser.runtime.lastError}`);
+      } else {
+        console.log("Item created successfully");
+    }
+}
+
+
+/*
+Create the context menu item.
+*/
+browser.contextMenus.create({
+  id: "laburtu-eus",
+  title: 'Laburtu!',
+  contexts: ["all"]
+}, onContextMenuItemCreated);
+
+
+/*
+The click event listener, where we perform the appropriate action given the
+ID of the menu item that was clicked.
+*/
+browser.contextMenus.onClicked.addListener(function(info, tab) {
+  switch (info.menuItemId) {
+    case "laburtu-eus":
+      console.log("laburtu-eus");
+      break;
+  }
+});
+
 
 function param(obj) {
   return Object.keys(obj).map(
@@ -54,6 +85,5 @@ function handleMessage(message, sender, sendResponse) {
   return true;  // indicates an async response
 }
 browser.runtime.onMessage.addListener(handleMessage);
-
 
 handleUpdateActiveTab();  // Initial load
