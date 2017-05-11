@@ -1,14 +1,14 @@
 function saveOptions(e) {
     e.preventDefault();
     browser.storage.local.set({
-        "erabiltzaile-izena": document.querySelector("#erabiltzailea-izena").value
+        "erabiltzaile-izena": document.querySelector("#erabiltzaile-izena").value
     });
 }
 
 function restoreOptions() {
 
     function setCurrentChoice(result) {
-        document.querySelector("#erabiltzaile-izena").value = result.erabiltzaile_izena || "";
+        document.querySelector("#erabiltzaile-izena").value = result['erabiltzaile-izena'] || "";
     }
 
     function onError(error) {
