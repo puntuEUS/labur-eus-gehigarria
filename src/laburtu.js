@@ -25,6 +25,34 @@ browser.contextMenus.create({
     contexts: ["link"]
 }, onContextMenuItemCreated);
 
+function copyToClipboard(tab, url) {
+    // Since background pages cannot directly write to the clipboard,
+    // we will run a content script that copies the actual content.
+
+    // clipboard-helper.js defines function copyToClipboard.
+    const code = "copyToClipboard(" + JSON.stringify(url) + ");"
+
+    browser.tabs.executeScript({
+        code: "typeof copyToClipboard === 'function';",
+    }).then(function(results) {
+        // The content script's last expression will be true if the function
+        // has been defined. If this is not the case, then we need to run
+        // clipboard-helper.js to define function copyToClipboard.
+        if (!results || results[0] !== true) {
+            return browser.tabs.executeScript(tab.id, {
+                file: "clipboard-helper.js",
+            });
+        }
+    }).then(function() {
+        return browser.tabs.executeScript(tab.id, {
+            code,
+        });
+    }).catch(function(error) {
+        // This could happen if the extension is not allowed to run code in
+        // the page, for example if the tab is a privileged page.
+        console.error("Failed to copy text: " + error);
+    });
+}
 
 /*
 The click event listener, where we perform the appropriate action given the
@@ -35,32 +63,25 @@ browser.contextMenus.onClicked.addListener(function(info, tab) {
         case "laburtu-eus":
             const url = info.linkUrl;
 
-            // Since background pages cannot directly write to the clipboard,
-            // we will run a content script that copies the actual content.
+            let shortenedUrl;
 
-            // clipboard-helper.js defines function copyToClipboard.
-            const code = "copyToClipboard(" + JSON.stringify(url) + ");"
+            if (URL_CACHE.hasOwnProperty(url)) {
+                shortenedUrl = URL_CACHE[url];
+                copyToClipboard(tab, shortenedUrl);
+                break;
+            }
 
-            browser.tabs.executeScript({
-                code: "typeof copyToClipboard === 'function';",
-            }).then(function(results) {
-                // The content script's last expression will be true if the function
-                // has been defined. If this is not the case, then we need to run
-                // clipboard-helper.js to define function copyToClipboard.
-                if (!results || results[0] !== true) {
-                    return browser.tabs.executeScript(tab.id, {
-                        file: "clipboard-helper.js",
-                    });
-                }
-            }).then(function() {
-                return browser.tabs.executeScript(tab.id, {
-                    code,
-                });
-            }).catch(function(error) {
-                // This could happen if the extension is not allowed to run code in
-                // the page, for example if the tab is a privileged page.
-                console.error("Failed to copy text: " + error);
+            const params = param({
+                url,
+                key: API_KEY
             });
+            fetch(`${API_SHORTEN}?${params}`)
+                .then(response => response.text())
+                .then(shortUrl => {
+                    URL_CACHE[url] = shortUrl;
+                    copyToClipboard(tab, shortUrl);
+                });
+
             break;
     }
 });
