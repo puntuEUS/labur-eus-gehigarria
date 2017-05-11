@@ -32,7 +32,7 @@ ID of the menu item that was clicked.
 browser.contextMenus.onClicked.addListener(function(info, tab) {
   switch (info.menuItemId) {
     case "laburtu-eus":
-      console.log("laburtu-eus");
+      console.log(info.linkUrl);
       break;
   }
 });
