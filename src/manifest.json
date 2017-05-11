@@ -1,34 +1,34 @@
 {
-  "manifest_version": 2,
-  "name": "Laburtu",
-  "version": "0.1",
+    "manifest_version": 2,
+    "name": "Laburtu",
+    "version": "0.1",
 
-  "description": "Laburtu helbideak labur.eus zerbitzua erabiliz.",
+    "description": "Laburtu helbideak labur.eus zerbitzua erabiliz.",
 
-  "icons": {
-    "16": "icons/laburtu-16.png",
-    "32": "icons/laburtu-32.png",
-    "48": "icons/laburtu-48.png",
-    "96": "icons/laburtu-96.png"
-  },
-
-  "permissions": [
-    "clipboardWrite",
-    "tabs",
-    "contextMenus",
-    "<all_urls>"
-  ],
-
-  "page_action": {
-    "browser_style": true,
-    "default_icon": {
-      "19": "icons/laburtu-19.png"
+    "icons": {
+        "16": "icons/laburtu-16.png",
+        "32": "icons/laburtu-32.png",
+        "48": "icons/laburtu-48.png",
+        "96": "icons/laburtu-96.png"
     },
-    "default_title": "Laburtu!",
-    "default_popup": "popup.html"
-  },
 
-  "background": {
-    "scripts": ["laburtu.js"]
-  }
+    "permissions": [
+        "clipboardWrite",
+        "tabs",
+        "contextMenus",
+        "<all_urls>"
+    ],
+
+    "page_action": {
+        "browser_style": true,
+        "default_icon": {
+            "19": "icons/laburtu-19.png"
+        },
+        "default_title": "Laburtu!",
+        "default_popup": "popup.html"
+    },
+
+    "background": {
+        "scripts": ["laburtu.js"]
+    }
 }

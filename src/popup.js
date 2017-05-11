@@ -1,25 +1,25 @@
 function copyToClipboard(text) {
-  const input = document.createElement('input');
-  input.value = text;
-  document.body.appendChild(input);
-  input.select();
-  document.execCommand('copy');
-  document.body.removeChild(input);
+    const input = document.createElement('input');
+    input.value = text;
+    document.body.appendChild(input);
+    input.select();
+    document.execCommand('copy');
+    document.body.removeChild(input);
 }
 
 
 function handleDOMLoad() {
-  browser.runtime
-    .sendMessage({
-      from: 'popup',
-      subject: 'getUrl',
-    })
-    .then(url => {
-      const placeholder = document.querySelector('.js-url');
-      placeholder.textContent = url;
+    browser.runtime
+        .sendMessage({
+            from: 'popup',
+            subject: 'getUrl',
+        })
+        .then(url => {
+            const placeholder = document.querySelector('.js-url');
+            placeholder.textContent = url;
 
-      copyToClipboard(url);
-    });
+            copyToClipboard(url);
+        });
 }
 
 window.addEventListener('DOMContentLoaded', handleDOMLoad);
