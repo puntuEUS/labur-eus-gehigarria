@@ -20,7 +20,7 @@
         "<all_urls>"
     ],
 
-    "page_action": {
+    "browser_action": {
         "browser_style": true,
         "default_icon": {
             "19": "icons/laburtu-19.png"
