@@ -9,12 +9,12 @@ function copyToClipboard(text) {
 
 
 function handleDOMLoad() {
-    browser.runtime
+    chrome.runtime
         .sendMessage({
             from: 'popup',
             subject: 'getUrl',
-        })
-        .then(url => {
+        }, function(url) {
+            console.log(url);
             const placeholder = document.querySelector('.js-url');
             placeholder.textContent = url;
 

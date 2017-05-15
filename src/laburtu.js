@@ -8,8 +8,8 @@ let currentTab = null;
 
 
 function onContextMenuItemCreated(n) {
-    if (browser.runtime.lastError) {
-        console.log(`Error: ${browser.runtime.lastError}`);
+    if (chrome.runtime.lastError) {
+        console.log(`Error: ${chrome.runtime.lastError}`);
     } else {
         console.log("Item created successfully");
     }
@@ -32,19 +32,19 @@ function copyToClipboard(tab, url) {
     // clipboard-helper.js defines function copyToClipboard.
     const code = "copyToClipboard(" + JSON.stringify(url) + ");"
 
-    browser.tabs.executeScript({
+    chrome.tabs.executeScript({
         code: "typeof copyToClipboard === 'function';",
     }).then(function(results) {
         // The content script's last expression will be true if the function
         // has been defined. If this is not the case, then we need to run
         // clipboard-helper.js to define function copyToClipboard.
         if (!results || results[0] !== true) {
-            return browser.tabs.executeScript(tab.id, {
+            return chrome.tabs.executeScript(tab.id, {
                 file: "clipboard-helper.js",
             });
         }
     }).then(function() {
-        return browser.tabs.executeScript(tab.id, {
+        return chrome.tabs.executeScript(tab.id, {
             code,
         });
     }).catch(function(error) {
@@ -58,7 +58,7 @@ function copyToClipboard(tab, url) {
 The click event listener, where we perform the appropriate action given the
 ID of the menu item that was clicked.
 */
-browser.contextMenus.onClicked.addListener(function(info, tab) {
+chrome.contextMenus.onClicked.addListener(function(info, tab) {
     switch (info.menuItemId) {
         case "laburtu-eus":
             const url = info.linkUrl;
@@ -94,28 +94,24 @@ function param(obj) {
 }
 
 
-function updateTab(tabs) {
-    currentTab = tabs[0];
-    if (!currentTab || (currentTab && !currentTab.url.startsWith('http'))) {
-        return;
-    }
-    browser.pageAction.show(currentTab.id);
-}
-
-
 function handleUpdateActiveTab() {
-    browser.tabs
-        .query({
-            active: true,
-            currentWindow: true
-        })
-        .then(updateTab);
+    chrome.tabs.query({
+        active: true,
+        currentWindow: true
+    }, function(tabs) {
+        currentTab = tabs[0];
+        /*if (!currentTab || (currentTab && !currentTab.url.startsWith('http'))) {
+            return;
+        }
+        chrome.pageAction.show(currentTab.id);*/
+    });
 }
-browser.tabs.onUpdated.addListener(handleUpdateActiveTab);
-browser.tabs.onActivated.addListener(handleUpdateActiveTab);
+chrome.tabs.onUpdated.addListener(handleUpdateActiveTab);
+chrome.tabs.onActivated.addListener(handleUpdateActiveTab);
 
 
 function handleMessage(message, sender, sendResponse) {
+    console.log("message");
     if (message.from !== 'popup' || message.subject !== 'getUrl') {
         return;
     }
@@ -123,6 +119,8 @@ function handleMessage(message, sender, sendResponse) {
     const {
         url
     } = currentTab;
+
+    console.log(url);
     if (URL_CACHE.hasOwnProperty(url)) {
         sendResponse(URL_CACHE[url]);
         return;
@@ -141,6 +139,6 @@ function handleMessage(message, sender, sendResponse) {
 
     return true; // indicates an async response
 }
-browser.runtime.onMessage.addListener(handleMessage);
+chrome.runtime.onMessage.addListener(handleMessage);
 
 handleUpdateActiveTab(); // Initial load
