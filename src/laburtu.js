@@ -19,7 +19,7 @@ function onContextMenuItemCreated(n) {
 /*
 Create the context menu item.
 */
-browser.contextMenus.create({
+chrome.contextMenus.create({
     id: "laburtu-eus",
     title: 'Laburtu URL hau',
     contexts: ["link"]
