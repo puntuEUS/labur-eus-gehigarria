@@ -32,8 +32,8 @@ function copyToClipboard(tab, url) {
     // clipboard-helper.js defines function copyToClipboard.
     const code = "copyToClipboard(" + JSON.stringify(url) + ");"
 
-    chrome.tabs.executeScript({
-        code: "typeof copyToClipboard === 'function';",
+    chrome.tabs.executeScript(tab.id, {
+        code: code,
     }).then(function(results) {
         // The content script's last expression will be true if the function
         // has been defined. If this is not the case, then we need to run
@@ -71,21 +71,43 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
                 break;
             }
 
-            const params = param({
-                url,
-                key: API_KEY
+            getShortenedUrl(url, function(shortenedUrl) {
+                URL_CACHE[url] = shortenedUrl;
+                copyToClipboard(tab, shortenedUrl);
+            }, function(errorMessage) {
+                console.log(errorMessage);
             });
-            fetch(`${API_SHORTEN}?${params}`)
-                .then(response => response.text())
-                .then(shortUrl => {
-                    URL_CACHE[url] = shortUrl;
-                    copyToClipboard(tab, shortUrl);
-                });
+
 
             break;
     }
 });
 
+function getShortenedUrl(url, callback, errorCallback) {
+    const params = param({
+        url,
+        key: API_KEY
+    });
+
+    var requestUrl = `${API_SHORTEN}?${params}`;
+    console.log(requestUrl);
+    var x = new XMLHttpRequest();
+    x.open('GET', requestUrl);
+    x.responseType = 'text';
+    x.onload = function() {
+        var shortenedUrl = x.response;
+        console.log(x.status);
+        if (!shortenedUrl || x.status !== 200) {
+          errorCallback('No response from Polr or an error happened!');
+          return;
+        }
+        callback(shortenedUrl);
+    };
+    x.onerror = function() {
+        errorCallback('Network error.');
+    };
+    x.send();
+}
 
 function param(obj) {
     return Object.keys(obj).map(
