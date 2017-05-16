@@ -24,8 +24,6 @@ getApiKeyFromStorage();
 function onContextMenuItemCreated(n) {
     if (chrome.runtime.lastError) {
         console.log(`Error: ${chrome.runtime.lastError}`);
-    } else {
-        console.log("Item created successfully");
     }
 }
 
@@ -93,13 +91,13 @@ function getShortenedUrl(url, callback, errorCallback) {
     });
 
     var requestUrl = `${API_SHORTEN}?${params}`;
-    console.log(requestUrl);
+
     var x = new XMLHttpRequest();
     x.open('GET', requestUrl);
     x.responseType = 'text';
     x.onload = function() {
         var shortenedUrl = x.response;
-        console.log(x.status);
+        
         if (!shortenedUrl || x.status !== 200) {
           errorCallback('No response from Polr or an error happened!');
           return;
@@ -141,8 +139,6 @@ function handleMessage(message, sender, sendResponse) {
         const {
             url
         } = currentTab;
-
-        console.log(url);
 
         if (URL_CACHE.hasOwnProperty(url)) {
 
