@@ -2,12 +2,18 @@ function saveOptions(e) {
     e.preventDefault();
     chrome.storage.sync.set({
         "api-key": document.querySelector("#api-key").value
+    }, function() {
+
+        chrome.runtime.sendMessage({
+            from: "option",
+            subject: "updateApiKey"
+        });
     });
 }
 
 function restoreOptions() {
 
-    var getting = chrome.storage.sync.get("api-key", function(result) {
+    chrome.storage.sync.get("api-key", function(result) {
         document.querySelector("#api-key").value = result['api-key'] || "";
     });
 }

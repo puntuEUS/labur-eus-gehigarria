@@ -1,11 +1,25 @@
 const API_ROOT = 'https://labur.eus/api/v2';
-const API_KEY = '169fc94bfdd75d7268a20c0cf8b600';
 const API_SHORTEN = `${API_ROOT}/action/shorten`;
 
 const URL_CACHE = {};
 
+// Default API key.
+let api_key = '169fc94bfdd75d7268a20c0cf8b600';
+
 let currentTab = null;
 
+function getApiKeyFromStorage() {
+    // If available use the API key of the user instead of the default one.
+    chrome.storage.sync.get("api-key", function(result) {
+
+        if (result && result["api-key"] !== undefined) {
+
+            api_key = result["api-key"];
+        }
+    });
+}
+
+getApiKeyFromStorage();
 
 function onContextMenuItemCreated(n) {
     if (chrome.runtime.lastError) {
@@ -40,7 +54,7 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
 
                 shortenedUrl = URL_CACHE[url];
 
-                chrome.storage.local.set({
+                chrome.storage.sync.set({
                     "shortened-url": shortenedUrl
                 });
 
@@ -55,7 +69,7 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
 
                 URL_CACHE[url] = shortenedUrl;
 
-                chrome.storage.local.set({
+                chrome.storage.sync.set({
                     "shortened-url": shortenedUrl
                 });
 
@@ -75,7 +89,7 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
 function getShortenedUrl(url, callback, errorCallback) {
     const params = param({
         url,
-        key: API_KEY
+        key: api_key
     });
 
     var requestUrl = `${API_SHORTEN}?${params}`;
@@ -122,51 +136,60 @@ chrome.tabs.onActivated.addListener(handleUpdateActiveTab);
 
 
 function handleMessage(message, sender, sendResponse) {
-    console.log("message");
-    if (message.from !== 'popup' || message.subject !== 'getUrl') {
+
+    if (message.from === "popup" && message.subject === "getUrl") {
+        const {
+            url
+        } = currentTab;
+
+        console.log(url);
+
+        if (URL_CACHE.hasOwnProperty(url)) {
+
+            chrome.storage.sync.set({
+                "shortened-url": URL_CACHE[url]
+            });
+
+            chrome.tabs.executeScript(currentTab.id, {
+                file: "clipboard-helper.js",
+            });
+
+            sendResponse(URL_CACHE[url]);
+
+            return;
+        }
+
+        getShortenedUrl(url, function(shortenedUrl) {
+
+            URL_CACHE[url] = shortenedUrl;
+
+            chrome.storage.sync.set({
+                "shortened-url": shortenedUrl
+            });
+
+            chrome.tabs.executeScript(currentTab.id, {
+                file: "clipboard-helper.js",
+            });
+
+            sendResponse(shortenedUrl);
+
+        }, function(errorMessage) {
+            console.log(errorMessage);
+        });
+
+        return true; // indicates an async response
+
+    } else if (message.from === "options" && message.subject === "updateApiKey") {
+
+        getApiKeyFromStorage();
+
+        return true;
+
+    } else {
+
         return;
+
     }
-
-    const {
-        url
-    } = currentTab;
-
-    console.log(url);
-
-    if (URL_CACHE.hasOwnProperty(url)) {
-
-        chrome.storage.local.set({
-            "shortened-url": URL_CACHE[url]
-        });
-
-        chrome.tabs.executeScript(currentTab.id, {
-            file: "clipboard-helper.js",
-        });
-
-        sendResponse(URL_CACHE[url]);
-
-        return;
-    }
-
-    getShortenedUrl(url, function(shortenedUrl) {
-
-        URL_CACHE[url] = shortenedUrl;
-
-        chrome.storage.local.set({
-            "shortened-url": shortenedUrl
-        });
-
-        chrome.tabs.executeScript(currentTab.id, {
-            file: "clipboard-helper.js",
-        });
-
-        sendResponse(shortenedUrl);
-
-    }, function(errorMessage) {
-        console.log(errorMessage);
-    });
-
-    return true; // indicates an async response
 }
 chrome.runtime.onMessage.addListener(handleMessage);
 

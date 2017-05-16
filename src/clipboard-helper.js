@@ -18,13 +18,13 @@ function copyToClipboard(text) {
     document.execCommand("copy");
 }
 
-var getting = chrome.storage.local.get("shortened-url", function(result) {
-    if (result["shortened-url"] != "") {
+var getting = chrome.storage.sync.get("shortened-url", function(result) {
+    if (result["shortened-url"] !== undefined) {
 
         copyToClipboard(result["shortened-url"]);
 
-        chrome.storage.local.set({
-            "shortened-url": ""
+        chrome.storage.sync.set({
+            "shortened-url": undefined
         });
     }
 });
