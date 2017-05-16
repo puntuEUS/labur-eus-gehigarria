@@ -98,7 +98,7 @@ function showBasicNotification(message) {
 
 function getShortenedUrl(url, callback, errorCallback) {
     const params = param({
-        url,
+        url: url,
         key: api_key
     });
 
