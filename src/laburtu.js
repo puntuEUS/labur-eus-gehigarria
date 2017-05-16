@@ -25,35 +25,6 @@ chrome.contextMenus.create({
     contexts: ["link"]
 }, onContextMenuItemCreated);
 
-function copyToClipboard(tab, url) {
-    // Since background pages cannot directly write to the clipboard,
-    // we will run a content script that copies the actual content.
-
-    // clipboard-helper.js defines function copyToClipboard.
-    const code = "copyToClipboard(" + JSON.stringify(url) + ");"
-
-    chrome.tabs.executeScript(tab.id, {
-        code: code,
-    }).then(function(results) {
-        // The content script's last expression will be true if the function
-        // has been defined. If this is not the case, then we need to run
-        // clipboard-helper.js to define function copyToClipboard.
-        if (!results || results[0] !== true) {
-            return chrome.tabs.executeScript(tab.id, {
-                file: "clipboard-helper.js",
-            });
-        }
-    }).then(function() {
-        return chrome.tabs.executeScript(tab.id, {
-            code,
-        });
-    }).catch(function(error) {
-        // This could happen if the extension is not allowed to run code in
-        // the page, for example if the tab is a privileged page.
-        console.error("Failed to copy text: " + error);
-    });
-}
-
 /*
 The click event listener, where we perform the appropriate action given the
 ID of the menu item that was clicked.
@@ -66,14 +37,32 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
             let shortenedUrl;
 
             if (URL_CACHE.hasOwnProperty(url)) {
+
                 shortenedUrl = URL_CACHE[url];
-                copyToClipboard(tab, shortenedUrl);
+
+                chrome.storage.local.set({
+                    "shortened-url": shortenedUrl
+                });
+
+                chrome.tabs.executeScript(tab.id, {
+                    file: "clipboard-helper.js",
+                });
+
                 break;
             }
 
             getShortenedUrl(url, function(shortenedUrl) {
+
                 URL_CACHE[url] = shortenedUrl;
-                copyToClipboard(tab, shortenedUrl);
+
+                chrome.storage.local.set({
+                    "shortened-url": shortenedUrl
+                });
+
+                chrome.tabs.executeScript(tab.id, {
+                    file: "clipboard-helper.js",
+                });
+
             }, function(errorMessage) {
                 console.log(errorMessage);
             });
@@ -143,21 +132,39 @@ function handleMessage(message, sender, sendResponse) {
     } = currentTab;
 
     console.log(url);
+
     if (URL_CACHE.hasOwnProperty(url)) {
+
+        chrome.storage.local.set({
+            "shortened-url": URL_CACHE[url]
+        });
+
+        chrome.tabs.executeScript(currentTab.id, {
+            file: "clipboard-helper.js",
+        });
+
         sendResponse(URL_CACHE[url]);
+
         return;
     }
 
-    const params = param({
-        url,
-        key: API_KEY
-    });
-    fetch(`${API_SHORTEN}?${params}`)
-        .then(response => response.text())
-        .then(shortUrl => {
-            URL_CACHE[url] = shortUrl;
-            sendResponse(shortUrl);
+    getShortenedUrl(url, function(shortenedUrl) {
+
+        URL_CACHE[url] = shortenedUrl;
+
+        chrome.storage.local.set({
+            "shortened-url": shortenedUrl
         });
+
+        chrome.tabs.executeScript(currentTab.id, {
+            file: "clipboard-helper.js",
+        });
+
+        sendResponse(shortenedUrl);
+
+    }, function(errorMessage) {
+        console.log(errorMessage);
+    });
 
     return true; // indicates an async response
 }
