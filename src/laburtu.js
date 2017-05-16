@@ -60,25 +60,38 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
                     file: "clipboard-helper.js",
                 });
 
-                break;
+                chrome.notifications.create({
+                    type: "basic",
+                    iconUrl: "icons/laburtu-96.png",
+                    title: "Laburtu.eus",
+                    message: `Helbidea arbelean kopiatu da: ${shortenedUrl}`
+                });
+
+            } else {
+
+                getShortenedUrl(url, function(shortenedUrl) {
+
+                    URL_CACHE[url] = shortenedUrl;
+
+                    chrome.storage.sync.set({
+                        "shortened-url": shortenedUrl
+                    });
+
+                    chrome.tabs.executeScript(tab.id, {
+                        file: "clipboard-helper.js",
+                    });
+
+                    chrome.notifications.create({
+                        type: "basic",
+                        iconUrl: "icons/laburtu-96.png",
+                        title: "Laburtu.eus",
+                        message: `Helbidea arbelean kopiatu da: ${shortenedUrl}`
+                    });
+
+                }, function(errorMessage) {
+                    console.log(errorMessage);
+                });
             }
-
-            getShortenedUrl(url, function(shortenedUrl) {
-
-                URL_CACHE[url] = shortenedUrl;
-
-                chrome.storage.sync.set({
-                    "shortened-url": shortenedUrl
-                });
-
-                chrome.tabs.executeScript(tab.id, {
-                    file: "clipboard-helper.js",
-                });
-
-            }, function(errorMessage) {
-                console.log(errorMessage);
-            });
-
 
             break;
     }
@@ -97,7 +110,7 @@ function getShortenedUrl(url, callback, errorCallback) {
     x.responseType = 'text';
     x.onload = function() {
         var shortenedUrl = x.response;
-        
+
         if (!shortenedUrl || x.status !== 200) {
           errorCallback('No response from Polr or an error happened!');
           return;
