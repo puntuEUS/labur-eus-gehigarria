@@ -60,12 +60,7 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
                     file: "clipboard-helper.js",
                 });
 
-                chrome.notifications.create({
-                    type: "basic",
-                    iconUrl: "icons/laburtu-96.png",
-                    title: "Laburtu.eus",
-                    message: `Helbidea arbelean kopiatu da: ${shortenedUrl}`
-                });
+                showBasicNotification(`Helbidea arbelean kopiatu da: ${shortenedUrl}`);
 
             } else {
 
@@ -81,12 +76,7 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
                         file: "clipboard-helper.js",
                     });
 
-                    chrome.notifications.create({
-                        type: "basic",
-                        iconUrl: "icons/laburtu-96.png",
-                        title: "Laburtu.eus",
-                        message: `Helbidea arbelean kopiatu da: ${shortenedUrl}`
-                    });
+                    showBasicNotification(`Helbidea arbelean kopiatu da: ${shortenedUrl}`);
 
                 }, function(errorMessage) {
                     console.log(errorMessage);
@@ -96,6 +86,15 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
             break;
     }
 });
+
+function showBasicNotification(message) {
+    chrome.notifications.create({
+        type: "basic",
+        iconUrl: "icons/laburtu-96.png",
+        title: "Laburtu.eus",
+        message: message
+    });
+}
 
 function getShortenedUrl(url, callback, errorCallback) {
     const params = param({
@@ -163,6 +162,8 @@ function handleMessage(message, sender, sendResponse) {
                 file: "clipboard-helper.js",
             });
 
+            showBasicNotification(`Helbidea arbelean kopiatu da: ${URL_CACHE[url]}`);
+
             sendResponse(URL_CACHE[url]);
 
             return;
@@ -179,6 +180,8 @@ function handleMessage(message, sender, sendResponse) {
             chrome.tabs.executeScript(currentTab.id, {
                 file: "clipboard-helper.js",
             });
+
+            showBasicNotification(`Helbidea arbelean kopiatu da: ${shortenedUrl}`);
 
             sendResponse(shortenedUrl);
 
