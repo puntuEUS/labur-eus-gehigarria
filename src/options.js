@@ -1,22 +1,15 @@
 function saveOptions(e) {
     e.preventDefault();
-    browser.storage.local.set({
-        "erabiltzaile-izena": document.querySelector("#erabiltzaile-izena").value
+    chrome.storage.sync.set({
+        "api-key": document.querySelector("#api-key").value
     });
 }
 
 function restoreOptions() {
 
-    function setCurrentChoice(result) {
-        document.querySelector("#erabiltzaile-izena").value = result['erabiltzaile-izena'] || "";
-    }
-
-    function onError(error) {
-        console.log(`Error: ${error}`);
-    }
-
-    var getting = browser.storage.local.get("erabiltzaile-izena");
-    getting.then(setCurrentChoice, onError);
+    var getting = chrome.storage.sync.get("api-key", function(result) {
+        document.querySelector("#api-key").value = result['api-key'] || "";
+    });
 }
 
 document.addEventListener("DOMContentLoaded", restoreOptions);
