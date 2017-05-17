@@ -1,10 +1,3 @@
-// Based on http://stackoverflow.com/a/8943487
-function getArrayOfUrls(text) {
-    var urlRegex =/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
-
-    return text.match(urlRegex);
-}
-
 if ($(".laburtu-btn").length === 0) {
 
     $(".TweetBoxExtras.tweet-box-extras").append('<span class="TweetBoxExtras-item"><div class="laburtu">' +
@@ -17,22 +10,23 @@ if ($(".laburtu-btn").length === 0) {
 }
 
 $(".laburtu-btn").click(function() {
-    var tweet = $("#tweet-box-global").text();
 
-    var urls = getArrayOfUrls(tweet);
+    var anchors = document.getElementById("tweet-box-global").getElementsByTagName("a");
 
-    urls.forEach(function(url) {
+    for (var i = 0; i < anchors.length; i++) {
 
-        chrome.runtime.sendMessage({
-            from: 'content',
-            subject: 'getUrl',
-            url: url
-        }, function(shortenedUrl) {
-            console.log(shortenedUrl);
-            tweet = tweet.replace(url, shortenedUrl);
-            console.log(tweet);
-            $("#tweet-box-global").text(tweet);
-        });
-    });
+        (function() {
+            var index = i;
+            var url = anchors[index].href;
 
+            chrome.runtime.sendMessage({
+                from: 'content',
+                subject: 'getUrl',
+                url: url
+            }, function(shortenedUrl) {
+                anchors[index].innerHTML = shortenedUrl;
+                anchors[index].href = shortenedUrl;
+            });
+        })();
+    }
 });
