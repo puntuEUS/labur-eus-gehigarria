@@ -47,7 +47,7 @@
     "content_scripts": [
         {
             "matches": ["https://twitter.com/*"],
-            "js": ["jquery-3.2.1.min.js", "twitter.js"],
+            "js": ["twitter.js"],
             "css": ["twitter.css"]
         }
     ]

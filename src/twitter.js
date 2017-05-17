@@ -15,26 +15,31 @@ if (document.getElementsByClassName("laburtu-btn").length === 0) {
         tweet_boxes[i].innerHTML = tweet_boxes[i].innerHTML + laburtu_button_html;
 
     }
-}
 
-$(".laburtu-btn").click(function() {
+    var buttons = document.getElementsByClassName("laburtu-btn");
 
-    var anchors = document.getElementById("tweet-box-global").getElementsByTagName("a");
+    for (var i = 0; i < buttons.length; i++) {
 
-    for (var i = 0; i < anchors.length; i++) {
+        buttons[i].addEventListener("click", function(e) {
 
-        (function() {
-            var index = i;
-            var url = anchors[index].href;
+            var anchors = document.getElementById("tweet-box-global").getElementsByTagName("a");
 
-            chrome.runtime.sendMessage({
-                from: 'content',
-                subject: 'getUrl',
-                url: url
-            }, function(shortenedUrl) {
-                anchors[index].innerHTML = shortenedUrl;
-                anchors[index].href = shortenedUrl;
-            });
-        })();
+            for (var j = 0; j < anchors.length; j++) {
+
+                (function() {
+                    var index = j;
+                    var url = anchors[index].href;
+
+                    chrome.runtime.sendMessage({
+                        from: 'content',
+                        subject: 'getUrl',
+                        url: url
+                    }, function(shortenedUrl) {
+                        anchors[index].innerHTML = shortenedUrl;
+                        anchors[index].href = shortenedUrl;
+                    });
+                })();
+            }
+        });
     }
-});
+}
