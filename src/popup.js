@@ -2,7 +2,7 @@ function handleDOMLoad() {
     chrome.runtime
         .sendMessage({
             from: 'popup',
-            subject: 'getUrl',
+            subject: 'getUrl'
         }, function(url) {
 
             const placeholder = document.querySelector('.js-url');
