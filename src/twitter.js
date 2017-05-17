@@ -37,6 +37,7 @@ if (document.getElementsByClassName("laburtu-btn").length === 0) {
                     }, function(shortenedUrl) {
                         anchors[index].innerHTML = shortenedUrl;
                         anchors[index].href = shortenedUrl;
+                        document.getElementById("tweet-box-global").focus();
                     });
                 })();
             }
