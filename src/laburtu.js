@@ -147,7 +147,30 @@ chrome.tabs.onActivated.addListener(handleUpdateActiveTab);
 
 function handleMessage(message, sender, sendResponse) {
 
-    if (message.from === "popup" && message.subject === "getUrl") {
+    if (message.from === "content" && message.subject === "getUrl") {
+
+        console.log(message.url);
+
+        if (URL_CACHE.hasOwnProperty(message.url)) {
+
+            sendResponse(URL_CACHE[message.url]);
+
+            return;
+        }
+
+        getShortenedUrl(message.url, function(shortenedUrl) {
+
+            URL_CACHE[message.url] = shortenedUrl;
+
+            sendResponse(shortenedUrl);
+
+        }, function(errorMessage) {
+            console.log(errorMessage);
+        });
+
+        return true; // indicates an async response
+
+    } else if ((message.from === "popup") && message.subject === "getUrl") {
         const {
             url
         } = currentTab;
