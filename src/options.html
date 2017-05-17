@@ -3,13 +3,84 @@
 <html>
   <head>
     <meta charset="utf-8">
+    <style>
+        body {
+            font-family: arial, helvetica, sans-serif;
+            font-size: 14px;
+        }
+        h1 {
+            font-size: 22px;
+            margin: 10px 0 10px 52px;
+        }
+        .panel {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 2px;
+            padding: 20px;
+            color: #333;
+            width: 640px;
+            margin: 10px auto;
+        }
+        .panel.heading img {
+            float: left;
+            margin-left: -5px;
+        }
+        #api-key {
+            width: 250px;
+            margin-left: 5px;
+            text-align: right;
+        }
+        button {
+            margin-top: 20px;
+            background-color: #fff;
+            border: 1px solid #999;
+            padding: 5px 10px;
+            font-weight: bold;
+        }
+        .footer {
+            text-align: center;
+        }
+        #icon-puntu-eus {
+            width: 100px;
+            vertical-align: middle;
+        }
+        #icon-labur-eus {
+            width: 150px;
+            vertical-align: middle;
+        }
+    </style>
   </head>
 
   <body>
 
+    <div class="panel heading">
+        <img src="icons/laburtu-48.png">
+        <h1>labur.eus gehigarriaren hobespenak</h1>
+    </div>
     <form>
-        <label>API gakoa<input type="text" id="api-key"></label>
-        <button type="submit">Gorde</button>
+        <div class="panel">
+            <div id="help">
+                <p>Laburtzen dituzun estekak zure profilari lotu eta estatistikak ikusi ahal izateko zure API gakoa erabili behar duzu. Horretarako jarraitu pauso hauek:</p>
+                <ol>
+                    <li><a href="https://labur.eus" target="_blank">labur.eus</a> webgunean saioa hasi.</li>
+                    <li>Joan arbelera eta Garatzailea aukera hautatu ezkerreko menuan.</li>
+                    <li>Bertan agertzen den API gakoa kopiatu, beheko testu-eremuan itsatsi eta Gorde botoia sakatu.</li>
+                </ol>
+            </div>
+            <div>
+                <label>API gakoa</label>
+                <input type="text" id="api-key">
+            </div>
+            <button type="submit">Gorde</button>
+            <div class="footer">
+                <a href="https://www.domeinuak.eus/" target="_blank">
+                    <img id="icon-puntu-eus" src="icons/logo-puntueus.png">
+                </a>
+                <a href="https://www.labur.eus/" target="_blank">
+                    <img id="icon-labur-eus" src="icons/labur-eus.png">
+                </a>
+            </div>
+        </div>
     </form>
 
     <script src="options.js"></script>
