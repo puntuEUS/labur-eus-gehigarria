@@ -5,7 +5,7 @@ function saveOptions(e) {
     }, function() {
 
         chrome.runtime.sendMessage({
-            from: "option",
+            from: "options",
             subject: "updateApiKey"
         });
     });
