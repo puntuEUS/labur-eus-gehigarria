@@ -44,14 +44,10 @@ for (var i = 0; i < tweet_boxes.length; i++) {
     }
 }
 
-var buttons = document.getElementsByClassName("laburtu-btn");
+document.addEventListener("click", function(e) {
 
-for (var i = 0; i < buttons.length; i++) {
-
-    buttons[i].addEventListener("click", function(e) {
-
+    if (e.target.classList.contains("laburtu-btn")) {
         rewriteTweetBoxContents("tweet-box-global");
         rewriteTweetBoxContents("tweet-box-home-timeline");
-
-    });
-}
+    }
+});
