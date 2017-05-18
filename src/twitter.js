@@ -47,7 +47,11 @@ for (var i = 0; i < tweet_boxes.length; i++) {
 document.addEventListener("click", function(e) {
 
     if (e.target.classList.contains("laburtu-btn")) {
-        rewriteTweetBoxContents("tweet-box-global");
-        rewriteTweetBoxContents("tweet-box-home-timeline");
+
+        var id = e.target.closest(".tweet-form").getElementsByClassName("tweet-box")[0].id;
+        
+        if (id) {
+            rewriteTweetBoxContents(id);
+        }
     }
 });
