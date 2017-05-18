@@ -50,7 +50,14 @@
             "js": ["twitter.js"],
             "css": ["twitter.css"],
             "run_at": "document_end"
+        },
+        {
+            "matches": ["https://mobile.twitter.com/compose/tweet"],
+            "js": ["laburtu-mobile-twitter.js"],
+            "css": ["laburtu-mobile-twitter.css"],
+            "run_at": "document_start"
         }
+
     ]
 
 }
