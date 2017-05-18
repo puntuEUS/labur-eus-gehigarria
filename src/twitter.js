@@ -44,7 +44,7 @@ for (var i = 0; i < tweet_boxes.length; i++) {
 }
 
 document.addEventListener("click", function(e) {
-
+    
     if (e.target.classList.contains("laburtu-btn")) {
 
         var tweet_box_element = e.target.closest(".tweet-form").getElementsByClassName("tweet-box")[0];
@@ -55,52 +55,15 @@ document.addEventListener("click", function(e) {
     }
 });
 
-// select the target node
-var target = document.getElementById("permalink-overlay");
-console.log(target);
-// create an observer instance
-var observer = new MutationObserver(function(mutations) {
-    mutations.forEach(function(mutation) {
-        console.log(mutation);
-
-        for (var i = 0; i < mutation.addedNodes.length; i++){
-            console.log(mutation.addedNodes[i]);
-        }
-        var tweet_boxes = target.getElementsByClassName("TweetBoxExtras tweet-box-extras");
-        console.log(tweet_boxes);
-        for (var i = 0; i < tweet_boxes.length; i++) {
-
-            if (tweet_boxes[i].getElementsByClassName("laburtu-btn").length === 0) {
-
-                tweet_boxes[i].innerHTML = tweet_boxes[i].innerHTML + laburtu_button_html;
-                console.log(tweet_boxes[i]);
-
-            }
-        }
-    });
-});
-
-// configuration of the observer:
-var config = {
-    attributes: true,
-    childList: true,
-    characterData: true,
-    subTree: true
-};
-
-// pass in the target node, as well as the observer options
-observer.observe(target, config);
-
+// I couldn't detect node insertion the proper way (MutationObservers) so I used this hack.
+// https://davidwalsh.name/detect-node-insertion
 var insertListener = function(event){
+
 	if (event.animationName == "nodeInserted") {
-		// This is the debug for knowing our listener worked!
-		// event.target is the new node!
-		console.warn("Another node has been inserted! ", event, event.target);
-        console.log(event.target);
+
         if (event.target.getElementsByClassName("laburtu-btn").length === 0) {
 
             event.target.innerHTML = event.target.innerHTML + laburtu_button_html;
-            console.log(event.target);
 
         }
 	}
