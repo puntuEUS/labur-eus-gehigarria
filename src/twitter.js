@@ -6,12 +6,11 @@ var laburtu_button_html = '<span class="TweetBoxExtras-item"><div class="laburtu
 '</div>' +
 '</span>';
 
-function shortenTweetBoxLinks(tweet_box_id) {
-    var tweet_box = document.getElementById(tweet_box_id);
+function shortenTweetBoxLinks(tweet_box_element) {
 
-    if (tweet_box) {
+    if (tweet_box_element) {
 
-        var anchors = tweet_box.getElementsByTagName("a");
+        var anchors = tweet_box_element.getElementsByTagName("a");
 
         for (var i = 0; i < anchors.length; i++) {
 
@@ -26,7 +25,7 @@ function shortenTweetBoxLinks(tweet_box_id) {
                 }, function(shortenedUrl) {
                     anchors[index].innerHTML = shortenedUrl;
                     anchors[index].href = shortenedUrl;
-                    document.getElementById(tweet_box_id).focus();
+                    tweet_box_element.focus();
                 });
             })();
         }
@@ -48,10 +47,10 @@ document.addEventListener("click", function(e) {
 
     if (e.target.classList.contains("laburtu-btn")) {
 
-        var id = e.target.closest(".tweet-form").getElementsByClassName("tweet-box")[0].id;
+        var tweet_box_element = e.target.closest(".tweet-form").getElementsByClassName("tweet-box")[0];
 
-        if (id) {
-            shortenTweetBoxLinks(id);
+        if (tweet_box_element) {
+            shortenTweetBoxLinks(tweet_box_element);
         }
     }
 });
