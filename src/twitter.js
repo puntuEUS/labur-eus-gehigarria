@@ -6,7 +6,7 @@ var laburtu_button_html = '<span class="TweetBoxExtras-item"><div class="laburtu
 '</div>' +
 '</span>';
 
-function rewriteTweetBoxContents(tweet_box_id) {
+function shortenTweetBoxLinks(tweet_box_id) {
     var tweet_box = document.getElementById(tweet_box_id);
 
     if (tweet_box) {
@@ -49,9 +49,9 @@ document.addEventListener("click", function(e) {
     if (e.target.classList.contains("laburtu-btn")) {
 
         var id = e.target.closest(".tweet-form").getElementsByClassName("tweet-box")[0].id;
-        
+
         if (id) {
-            rewriteTweetBoxContents(id);
+            shortenTweetBoxLinks(id);
         }
     }
 });
