@@ -2,4 +2,4 @@ VERSION = $(shell sed -n 's/"version": "\([^"]*\)",/\1/p' < src/manifest.json | 
 
 build:
 	cd src && \
-	zip ../dist/laburtu-${VERSION}.xpi -r .
+	zip ../dist/labur-eus-${VERSION}.xpi -r .
