@@ -2,6 +2,23 @@ var laburtu_button_html =   "<button class='laburtu-btn' aria-label='Laburtu txi
                                 "<span class='laburtu-icon'>&nbsp;</span>" +
                             "</button>";
 
+// Based on http://stackoverflow.com/a/8943487/2855012
+function shortenTweetBoxLinks(text, callback) {
+    var urlRegex =/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+    var urls = text.match(urlRegex);
+
+    urls.forEach(function(value, index, array) {
+
+        chrome.runtime.sendMessage({
+            from: 'content',
+            subject: 'getUrl',
+            url: value
+        }, function(shortenedUrl) {
+            callback(value, shortenedUrl);
+        });
+    });
+}
+
 document.addEventListener("click", function(e) {
 
     // If the target of the click is our button or its inner span...
@@ -10,7 +27,11 @@ document.addEventListener("click", function(e) {
         var tweet_textarea = document.querySelector("[data-testid='tweet-textarea']");
 
         if (tweet_textarea) {
-            alert(tweet_textarea.value);
+
+            shortenTweetBoxLinks(tweet_textarea.value, function(url, shortenedUrl) {
+                tweet_textarea.value = tweet_textarea.value.replace(url, shortenedUrl);
+                tweet_textarea.focus();
+            });
         }
     }
 });
