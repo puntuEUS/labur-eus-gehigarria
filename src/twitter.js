@@ -33,25 +33,25 @@ function rewriteTweetBoxContents(tweet_box_id) {
     }
 }
 
-if (document.getElementsByClassName("laburtu-btn").length === 0) {
+var tweet_boxes = document.getElementsByClassName("TweetBoxExtras tweet-box-extras");
 
-    var tweet_boxes = document.getElementsByClassName("TweetBoxExtras tweet-box-extras");
+for (var i = 0; i < tweet_boxes.length; i++) {
 
-    for (var i = 0; i < tweet_boxes.length; i++) {
+    if (tweet_boxes[i].getElementsByClassName("laburtu-btn").length === 0) {
 
         tweet_boxes[i].innerHTML = tweet_boxes[i].innerHTML + laburtu_button_html;
 
     }
+}
 
-    var buttons = document.getElementsByClassName("laburtu-btn");
+var buttons = document.getElementsByClassName("laburtu-btn");
 
-    for (var i = 0; i < buttons.length; i++) {
+for (var i = 0; i < buttons.length; i++) {
 
-        buttons[i].addEventListener("click", function(e) {
+    buttons[i].addEventListener("click", function(e) {
 
-            rewriteTweetBoxContents("tweet-box-global");
-            rewriteTweetBoxContents("tweet-box-home-timeline");
+        rewriteTweetBoxContents("tweet-box-global");
+        rewriteTweetBoxContents("tweet-box-home-timeline");
 
-        });
-    }
+    });
 }
