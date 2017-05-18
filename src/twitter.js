@@ -32,17 +32,6 @@ function shortenTweetBoxLinks(tweet_box_element) {
     }
 }
 
-var tweet_boxes = document.getElementsByClassName("TweetBoxExtras tweet-box-extras");
-
-for (var i = 0; i < tweet_boxes.length; i++) {
-
-    if (tweet_boxes[i].getElementsByClassName("laburtu-btn").length === 0) {
-
-        tweet_boxes[i].innerHTML = tweet_boxes[i].innerHTML + laburtu_button_html;
-
-    }
-}
-
 document.addEventListener("click", function(e) {
     
     if (e.target.classList.contains("laburtu-btn")) {
