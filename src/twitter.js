@@ -6,6 +6,33 @@ var laburtu_button_html = '<span class="TweetBoxExtras-item"><div class="laburtu
 '</div>' +
 '</span>';
 
+function rewriteTweetBoxContents(tweet_box_id) {
+    var tweet_box = document.getElementById(tweet_box_id);
+
+    if (tweet_box) {
+
+        var anchors = tweet_box.getElementsByTagName("a");
+
+        for (var i = 0; i < anchors.length; i++) {
+
+            (function() {
+                var index = i;
+                var url = anchors[index].href;
+
+                chrome.runtime.sendMessage({
+                    from: 'content',
+                    subject: 'getUrl',
+                    url: url
+                }, function(shortenedUrl) {
+                    anchors[index].innerHTML = shortenedUrl;
+                    anchors[index].href = shortenedUrl;
+                    document.getElementById(tweet_box_id).focus();
+                });
+            })();
+        }
+    }
+}
+
 if (document.getElementsByClassName("laburtu-btn").length === 0) {
 
     var tweet_boxes = document.getElementsByClassName("TweetBoxExtras tweet-box-extras");
@@ -22,25 +49,9 @@ if (document.getElementsByClassName("laburtu-btn").length === 0) {
 
         buttons[i].addEventListener("click", function(e) {
 
-            var anchors = document.getElementById("tweet-box-global").getElementsByTagName("a");
+            rewriteTweetBoxContents("tweet-box-global");
+            rewriteTweetBoxContents("tweet-box-home-timeline");
 
-            for (var j = 0; j < anchors.length; j++) {
-
-                (function() {
-                    var index = j;
-                    var url = anchors[index].href;
-
-                    chrome.runtime.sendMessage({
-                        from: 'content',
-                        subject: 'getUrl',
-                        url: url
-                    }, function(shortenedUrl) {
-                        anchors[index].innerHTML = shortenedUrl;
-                        anchors[index].href = shortenedUrl;
-                        document.getElementById("tweet-box-global").focus();
-                    });
-                })();
-            }
         });
     }
 }
