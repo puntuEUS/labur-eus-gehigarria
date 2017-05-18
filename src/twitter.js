@@ -34,8 +34,6 @@ function shortenTweetBoxLinks(tweet_box_element) {
 
 document.addEventListener("click", function(e) {
 
-    console.log(e.target);
-
     // If the target of the click is our button or its inner span...
     if (e.target.classList.contains("laburtu-btn") || e.target.parentNode.classList.contains("laburtu-btn")) {
 
