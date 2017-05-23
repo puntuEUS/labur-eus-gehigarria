@@ -14,20 +14,24 @@ function shortenTweetBoxLinks(tweet_box_element) {
 
         for (var i = 0; i < anchors.length; i++) {
 
-            (function() {
-                var index = i;
-                var url = anchors[index].href;
+            // Don't shorten the hashtags and user mentions.
+            if (["#", "@"].indexOf(anchors[i].text[0]) === -1) {
 
-                chrome.runtime.sendMessage({
-                    from: 'content',
-                    subject: 'getUrl',
-                    url: url
-                }, function(shortenedUrl) {
-                    anchors[index].innerHTML = shortenedUrl;
-                    anchors[index].href = shortenedUrl;
-                    tweet_box_element.focus();
-                });
-            })();
+                (function() {
+                    var index = i;
+                    var url = anchors[index].href;
+
+                    chrome.runtime.sendMessage({
+                        from: 'content',
+                        subject: 'getUrl',
+                        url: url
+                    }, function(shortenedUrl) {
+                        anchors[index].innerHTML = shortenedUrl;
+                        anchors[index].href = shortenedUrl;
+                        tweet_box_element.focus();
+                    });
+                })();
+            }
         }
     }
 }
