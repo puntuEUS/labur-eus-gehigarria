@@ -218,6 +218,8 @@ function handleMessage(message, sender, sendResponse) {
 
         getApiKeyFromStorage();
 
+        sendResponse(true);
+
         return true;
 
     } else {

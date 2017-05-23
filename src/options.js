@@ -1,5 +1,6 @@
 function saveOptions(e) {
     e.preventDefault();
+    
     chrome.storage.sync.set({
         "api-key": document.querySelector("#api-key").value
     }, function() {
@@ -7,6 +8,15 @@ function saveOptions(e) {
         chrome.runtime.sendMessage({
             from: "options",
             subject: "updateApiKey"
+        }, function(message) {
+
+            if (message) {
+                document.getElementById("message").style.display = "inline-block";
+
+                setTimeout(function() {
+                    document.getElementById("message").style.display = "none";
+                }, 2500);
+            }
         });
     });
 }
