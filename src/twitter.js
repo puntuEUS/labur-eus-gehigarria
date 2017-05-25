@@ -57,7 +57,7 @@ var insertListener = function(event){
 
         if (event.target.getElementsByClassName("laburtu-btn").length === 0) {
 
-            event.target.innerHTML = event.target.innerHTML + laburtu_button_html;
+            event.target.insertAdjacentHTML("afterbegin", laburtu_button_html);
 
         }
 	}
