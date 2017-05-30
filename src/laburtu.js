@@ -30,8 +30,9 @@ function onContextMenuItemCreated(n) {
 
 /*
 Create the context menu item.
+chrome.contextMenus is not defined in Firefox for Android (May 2017)
 */
-chrome.contextMenus.create({
+chrome.contextMenus && chrome.contextMenus.create({
     id: "laburtu-eus",
     title: 'Laburtu URL hau',
     contexts: ["link"]
@@ -40,8 +41,9 @@ chrome.contextMenus.create({
 /*
 The click event listener, where we perform the appropriate action given the
 ID of the menu item that was clicked.
+chrome.contextMenus is not defined in Firefox for Android (May 2017)
 */
-chrome.contextMenus.onClicked.addListener(function(info, tab) {
+chrome.contextMenus && chrome.contextMenus.onClicked.addListener(function(info, tab) {
     switch (info.menuItemId) {
         case "laburtu-eus":
             const url = info.linkUrl;
