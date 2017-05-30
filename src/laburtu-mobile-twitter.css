@@ -19,7 +19,7 @@
 	to { opacity: 1; }
 }
 
-button[data-testid='Button'] {
+textarea[data-testid='tweet-textarea'] {
     animation-duration: 0.001s;
     animation-name: nodeInserted;
 }
