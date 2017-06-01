@@ -1,24 +1,30 @@
 function saveOptions(e) {
     e.preventDefault();
-    
-    chrome.storage.sync.set({
-        "api-key": document.querySelector("#api-key").value
-    }, function() {
 
-        chrome.runtime.sendMessage({
-            from: "options",
-            subject: "updateApiKey"
-        }, function(message) {
+    var api_key = document.querySelector("#api-key").value;
 
-            if (message) {
-                document.getElementById("message").style.display = "inline-block";
+    // Don't save the API key if it's empty.
+    if (api_key !== "") {
 
-                setTimeout(function() {
-                    document.getElementById("message").style.display = "none";
-                }, 2500);
-            }
+        chrome.storage.sync.set({
+            "api-key": api_key
+        }, function() {
+
+            chrome.runtime.sendMessage({
+                from: "options",
+                subject: "updateApiKey"
+            }, function(message) {
+
+                if (message) {
+                    document.getElementById("message").style.display = "inline-block";
+
+                    setTimeout(function() {
+                        document.getElementById("message").style.display = "none";
+                    }, 2500);
+                }
+            });
         });
-    });
+    }
 }
 
 function restoreOptions() {
