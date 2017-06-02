@@ -12,7 +12,7 @@ function getApiKeyFromStorage() {
     // If available use the API key of the user instead of the default one.
     chrome.storage.sync.get("api-key", function(result) {
 
-        if (result && result["api-key"] !== undefined) {
+        if (result && result["api-key"] !== undefined && result["api-key"] !== "") {
 
             api_key = result["api-key"];
         }
