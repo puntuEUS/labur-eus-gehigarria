@@ -15,7 +15,7 @@ function shortenTweetBoxLinks(text, callback) {
     parts.forEach(function (value, index, array) {
 
         // Check if it doesn't start with http://, https://, ftp://.
-        if (!value.startsWith("http://" && !value.startsWith("https://" && !value.startsWith("ftp://")) {
+        if (!value.startsWith("http://") && !value.startsWith("https://") && !value.startsWith("ftp://")) {
 
             // We will accept only some TLDs: com, net, org, info, eus, es, fr, edu, cat, gal, biz, coop, eu
             var regexTLD = /(.+?)\.(com|net|org|info|eus|es|fr|edu|cat|gal|biz|coop|eu)(:|\?|\/|#|$)/ig;
