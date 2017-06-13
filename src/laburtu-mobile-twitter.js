@@ -5,7 +5,7 @@ var laburtu_button_html =   "<button class='laburtu-btn' aria-label='Laburtu txi
 // Based on http://stackoverflow.com/a/8943487/2855012
 function shortenTweetBoxLinks(text, callback) {
     var urlRegex =/(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
-    var urls = text.match(urlRegex);
+    var urls = text.match(urlRegex) || [];
 
     // We need to detect URLs not starting with http, https, ftp.
 
