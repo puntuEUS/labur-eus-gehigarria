@@ -62,7 +62,7 @@ var insertListener = function(event){
 
 	if (event.animationName == "nodeInserted" && document.getElementsByClassName("laburtu-btn").length === 0) {
 
-        var buttons = document.querySelectorAll("[data-testid='Button']");
+        var buttons = document.getElementsByTagName("button");
 
         buttons[buttons.length - 1].insertAdjacentHTML("afterEnd", laburtu_button_html);
 	}
