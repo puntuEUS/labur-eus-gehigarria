@@ -4,8 +4,28 @@ var laburtu_button_html =   "<button class='laburtu-btn' aria-label='Laburtu txi
 
 // Based on http://stackoverflow.com/a/8943487/2855012
 function shortenTweetBoxLinks(text, callback) {
-    var urlRegex =/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+    var urlRegex =/(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
     var urls = text.match(urlRegex);
+
+    // We need to detect URLs not starting with http, https, ftp.
+
+    // Split the tweet with space.
+    var parts = text.split(" ");
+
+    parts.forEach(function (value, index, array) {
+
+        // Check if it doesn't start with http://, https://, ftp://.
+        if (!value.startsWith("http://" && !value.startsWith("https://" && !value.startsWith("ftp://")) {
+
+            // We will accept only some TLDs: com, net, org, info, eus, es, fr, edu, cat, gal, biz, coop, eu
+            var regexTLD = /(.+?)\.(com|net|org|info|eus|es|fr|edu|cat|gal|biz|coop|eu)(:|\?|\/|#|$)/ig;
+
+            if (value.match(regexTLD)) {
+                urls.append(value);
+            }
+        }
+
+    });
 
     urls.forEach(function(value, index, array) {
 
