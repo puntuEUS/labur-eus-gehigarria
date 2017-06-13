@@ -21,7 +21,7 @@ function shortenTweetBoxLinks(text, callback) {
             var regexTLD = /(.+?)\.(com|net|org|info|eus|es|fr|edu|cat|gal|biz|coop|eu)(:|\?|\/|#|$)/ig;
 
             if (value.match(regexTLD)) {
-                urls.append(value);
+                urls.push(value);
             }
         }
 
