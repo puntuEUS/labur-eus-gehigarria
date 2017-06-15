@@ -4,7 +4,15 @@ function saveOptions(e) {
     var api_key = document.querySelector("#api-key").value;
 
     // Don't save the API key if it's empty.
-    if (api_key !== "") {
+    if (api_key === "") {
+
+        document.getElementById("no-api-key-message").style.display = "inline-block";
+
+        setTimeout(function() {
+            document.getElementById("no-api-key-message").style.display = "none";
+        }, 2500);
+
+    } else {
 
         chrome.storage.sync.set({
             "api-key": api_key
