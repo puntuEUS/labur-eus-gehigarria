@@ -33,6 +33,27 @@ function shortenTweetBoxLinks(tweet_box_element) {
                 })();
             }
         }
+
+        // twitter.com doesn't detect some URLs, e.g. URLs with two letter long top level domains eu, es, fr.
+        // Split the tweet with whitespace.
+        var parts = tweet_box_element.textContent.split(/\s/);
+        
+        parts.forEach(function (value, index, array) {
+
+            // We will accept only some TLDs: es, fr, eu
+            var regexTLD = /(.+?)\.(es|fr|eu)(:|\?|\/|#|$)/ig;
+
+            if (value.match(regexTLD)) {
+                chrome.runtime.sendMessage({
+                    from: 'content',
+                    subject: 'getUrl',
+                    url: value
+                }, function(shortenedUrl) {
+                    tweet_box_element.textContent = tweet_box_element.textContent.replace(value, shortenedUrl);
+                    tweet_box_element.focus();
+                });
+            }
+        });
     }
 }
 
