@@ -26,8 +26,7 @@ function shortenTweetBoxLinks(tweet_box_element) {
                         subject: 'getUrl',
                         url: url
                     }, function(shortenedUrl) {
-                        anchors[index].innerHTML = shortenedUrl;
-                        anchors[index].href = shortenedUrl;
+                        anchors[index].text = shortenedUrl;
                         tweet_box_element.focus();
                     });
                 })();
