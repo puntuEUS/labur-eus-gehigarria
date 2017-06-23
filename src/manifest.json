@@ -7,7 +7,7 @@
 
     "applications": {
         "gecko": {
-            "id": "laburtu@iametza.eus"
+            "id": "laburtu-for-android@iametza.eus"
         }
     },
 
@@ -26,15 +26,6 @@
         "notifications",
         "<all_urls>"
     ],
-
-    "browser_action": {
-        "browser_style": true,
-        "default_icon": {
-            "19": "icons/laburtu-19.png"
-        },
-        "default_title": "labur.eus",
-        "default_popup": "popup.html"
-    },
 
     "options_ui": {
         "page": "options.html"
