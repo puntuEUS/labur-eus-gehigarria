@@ -3,7 +3,7 @@
     "name": "labur.eus",
     "version": "0.3.10",
 
-    "description": "Laburtu estekak labur.eus zerbitzua erabiliz.",
+    "description": "labur.eus zerbitzua erabiliz URLak laburtzeko gehigarri ofiziala",
 
     "applications": {
         "gecko": {
